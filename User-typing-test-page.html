@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Test</title>
+  <link rel="stylesheet" href="CSS/typing_test.css" />
+</head>
+<body>
+
+  <div class="test-container">
+    <h2>Typing Test</h2>
+    <div class="text-to-type" id="textToType">
+      The quick brown fox jumps over the lazy dog.
+    </div>
+
+    <textarea id="userInput" placeholder="Start typing here..." oninput="startTimer()"></textarea>
+    <button onclick="finishTest()">Finish Test</button>
+
+    <div class="stats" id="results"></div>
+  </div>
+
+  <script>
+    let startTime;
+    let started = false;
+
+    function startTimer() {
+      if (!started) {
+        startTime = new Date();
+        started = true;
+      }
+    }
+
+    function finishTest() {
+      const endTime = new Date();
+      const timeTaken = (endTime - startTime) / 1000; // seconds
+
+      const originalText = document.getElementById("textToType").innerText.trim();
+      const userText = document.getElementById("userInput").value.trim();
+
+      const words = userText.split(/\s+/).length;
+      const wpm = Math.round((words / timeTaken) * 60);
+
+      let correct = 0;
+      for (let i = 0; i < userText.length && i < originalText.length; i++) {
+        if (userText[i] === originalText[i]) correct++;
+      }
+
+      const accuracy = Math.round((correct / originalText.length) * 100);
+
+      document.getElementById("results").innerHTML =
+        `<p>Time Taken: ${timeTaken.toFixed(1)} seconds</p>
+         <p>Words Per Minute: ${wpm}</p>
+         <p>Accuracy: ${accuracy}%</p>`;
+    }
+  </script>
+
+</body>
+</html>
